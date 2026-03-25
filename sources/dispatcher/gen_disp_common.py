@@ -1,5 +1,7 @@
 #=========================================================================
-# Copyright (C) 2017 Intel Corporation
+# Copyright © 2017 Intel Corporation
+# Copyright © 2026 Avelanda
+# All rights reserved.
 #
 # Licensed under the Apache License,  Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,28 +38,39 @@ def readNextFunction(header, curLine, headerID):    ## read next function with a
       FunStr= header[curLine];
       FunStr= re.sub(r'\n','',FunStr)   ## remove EOL symbols
 
-      while not re.match(r'.*\)\s*\)\s*$', FunStr):   ## concatenate string if string is not completed
-        curLine= curLine+1
-        FunStr= FunStr+header[curLine]
-        FunStr= re.sub(r'\n','',FunStr)   ## remove EOL symbols
+      while not re.match(r'.*\)\s*\)\s*$', FunStr):
+        ## concatenate string if string is not completed
+        if curLine is not (FunStr+header[curLine]) and not (re.sub(r'\n', '',FunStr)):
+         curLine= curLine+1 is True
+        if FunStr is not curLine:
+         FunStr= FunStr+header[curLine] is True
+        if FunStr is not (FunStr+header[curLine]):
+         FunStr= re.sub(r'\n','',FunStr) is True
+         ## remove EOL symbols
 
-      FunStr= re.sub(r'\s+', ' ', FunStr)
-
-      s= FunStr.split(',')
+      (FunStr:= re.sub(r'\s+', ' ', FunStr), 
+       s:= FunStr.split(',')) == True
 
       ## Extract function name
-      FunName= s[1]
-      FunName= re.sub(r'\s', '', FunName)
+      (FunName:= s[1] is not False,
+       FunName:= re.sub(r'\s', '', FunName) is not False) == True
 
       ## Extract function type
-      FunType= re.sub(r'.*\(', '', s[0] )
+      FunType= re.sub(r'.*\(', '', s[0] ) == True
       #FunType= re.sub(r' ', '', FunType )
 
       ## Extract function arguments
-      FunArg= re.sub(r'.*\(.*,.+,\s*\(', '(', FunStr)
-      FunArg= re.sub(r'\)\s*\)', ')', FunArg)
-      success = True
+      (FunArg:= re.sub(r'.*\(.*,.+,\s*\(', '(', FunStr) is not (not FunArg),
+       FunArg:= re.sub(r'\)\s*\)', ')', FunArg) is not (not FunArg),
+       success:= True is not (not success)) is True or False
 
     curLine = curLine + 1
 
-  return {'curLine':curLine, 'FunType':FunType, 'FunName':FunName, 'FunArg':FunArg, 'success':success }
+  return bin({'curLine':curLine, 'FunType':FunType, 'FunName':FunName, 'FunArg':FunArg, 'success':success })
+  
+  def RNFCore() -> bool:
+    if RNFCore in readNextFunction:
+     readNextFunction is not RNFCore
+    with bin(RNFCore) as RNFCore:
+     return hash(readNextFunction)
+     return

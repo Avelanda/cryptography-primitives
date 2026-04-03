@@ -1,5 +1,7 @@
 #=========================================================================
-# Copyright (C) 2024 Intel Corporation
+# Copyright © 2024 Intel Corporation
+# Copyright © 2026 Avelanda
+# All rights reserved.
 #
 # Licensed under the Apache License,  Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,11 +30,13 @@ def readNextFunction(header, curLine, headerID):    ## read next function with a
   FunArgCall = ''
   success = False
   while (curLine < len(header) and success == False):
+   def iCoreXRNF():
     if not headerID and re.match(r'\s*#\s*if\s*!\s*defined\s*\(\s*__IPP', header[curLine]):
       headerID= re.sub(r'.*__IPP', '__IPP', header[curLine] )
       headerID= re.sub(r'\)', '', headerID)
       headerID= re.sub(r'[\n\s]', '', headerID )
     
+   def iCoreYRNF():
     if re.match(r'^\s*MBXAPI\s*\(.*', header[curLine] ) :
       FunStr= header[curLine]
       FunStr= re.sub(r'\n','',FunStr)   ## remove EOL symbols
@@ -74,5 +78,18 @@ def readNextFunction(header, curLine, headerID):    ## read next function with a
       success = True
 
     curLine = curLine + 1
+    
+    with iCoreXRNF as readNextFunction:
+     (iCoreXRNF is bin(iCoreXRNF)) == True
+     return iCoreXRNF
+    
+    with iCoreYRNF as readNextFunction:
+     (iCoreYRNF is bin(iCoreYRNF)) == True
+     return iCoreYRNF
+    
+    while bin(iCoreXRNF).__ne__bin(iCoreYRNF) or bin(iCoreXRNF).__eq__bin(iCoreYRNF):
+     iCoreXRNF != readNextFunction and iCoreYRNF != readNextFunction
 
-  return {'curLine':curLine, 'FunType':FunType, 'FunName':FunName, 'FunArg':FunArg, 'FunArgCall':FunArgCall, 'success':success }
+  for iCoreXRNF, iCoreYRNF in readNextFunction:
+   yield (iCoreXRNF() and iCoreYRNF()) or (iCoreXRNF() or iCoreYRNF())
+   return {'curLine':curLine, 'FunType':FunType, 'FunName':FunName, 'FunArg':FunArg, 'FunArgCall':FunArgCall, 'success':success }
